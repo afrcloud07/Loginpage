@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="-1" />
+    <title>Masuk Jaringan - $(identity)</title>
+
+    <link rel="icon" href="title.png" />
+  </head>
+  <body>
+    <div
+      id="root"
+      data-identity="$(identity)"
+      data-error="$(error)"
+      data-chap-id="$(chap-id)"
+      data-chap-challenge="$(chap-challenge)"
+      data-link-login-only="$(link-login-only)"
+      data-link-orig="$(link-orig)"
+      data-link-orig-esc="$(link-orig-esc)"
+      data-mac-esc="$(mac-esc)"
+      data-trial="$(trial)"
+    ></div>
+
+    <script type="module" src="/src/login.jsx"></script>
+  </body>
+</html>
