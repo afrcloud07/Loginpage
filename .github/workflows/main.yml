@@ -1,0 +1,81 @@
+name: Multi ZIP Deep Refresh Build
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-multi:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Process Each ZIP
+        run: |
+          for zipfile in *.zip; do
+            [ -e "$zipfile" ] || continue
+            foldername="${zipfile%.*}"
+            
+            echo "Processing: $zipfile"
+
+            # 1. HAPUS DARI GIT INDEX (Penting agar Git menganggap folder ini baru)
+            git rm -rf "$foldername" --ignore-unmatch
+            
+            # 2. HAPUS FISIK
+            rm -rf "$foldername"
+            mkdir -p "$foldername"
+            
+            # 3. EKSTRAK ULANG
+            unzip -o "$zipfile" -d "$foldername"
+            
+            # 4. FIX STRUKTUR (Pindah ke root folder jika zip membungkus folder)
+            INNER_DIR=$(find "$foldername" -name "package.json" -printf '%h' -quit)
+            if [ -n "$INNER_DIR" ] && [ "$INNER_DIR" != "$foldername" ]; then
+              mv "$INNER_DIR"/* "$foldername/" 2>/dev/null || true
+            fi
+            
+            # 5. BUAT FILE PENANDA UNIK (Selalu berubah tiap run)
+            echo "Last Update: $(date +'%Y-%m-%d %H:%M:%S')" > "$foldername/last-build.log"
+            
+            cd "$foldername"
+            
+            # 6. HAPUS .GITIGNORE & BUILD
+            rm -f .gitignore
+            npm install
+            npm run build:all || npm run build
+            
+            cd "$GITHUB_WORKSPACE"
+          done
+
+      - name: Commit and Force Push
+        if: always()
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Force Add semua file
+          git add -A --force
+          
+          # Gunakan timestamp di commit message agar unik
+          TS=$(date +'%Y%m%d-%H%M%S')
+          
+          if ! git diff --cached --quiet; then
+            git commit -m "Update Build $TS [skip ci]"
+            git push origin main --force
+          else
+            # Jika tetap dianggap sama, paksa dengan commit kosong
+            git commit --allow-empty -m "Manual Refresh $TS [skip ci]"
+            git push origin main --force
+          fi
