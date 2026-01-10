@@ -1,4 +1,4 @@
-name: Multi ZIP Deep Refresh Build
+name: Multi ZIP Build with Auto-Cleanup
 
 on:
   push:
@@ -22,41 +22,50 @@ jobs:
         with:
           node-version: 20
 
-      - name: Process Each ZIP
+      - name: Process ZIPs and Cleanup
         run: |
+          # 1. CLEANUP: Hapus folder yang ZIP-nya sudah tidak ada
+          # Kita cek semua direktori di root kecuali folder sistem .git dan .github
+          for dir in */; do
+            dir=${dir%/} # Hapus slash di akhir nama folder
+            if [[ "$dir" == ".github" || "$dir" == "node_modules" ]]; then continue; fi
+            
+            # Jika tidak ada file ZIP yang namanya sama dengan folder, hapus foldernya
+            if [ ! -f "$dir.zip" ] && [ ! -f "$dir.ZIP" ]; then
+              echo "Menghapus folder yatim (tanpa ZIP): $dir"
+              git rm -rf "$dir" || rm -rf "$dir"
+            fi
+          done
+
+          # 2. PROCESS: Ekstrak dan Build ZIP yang ada
           for zipfile in *.zip; do
             [ -e "$zipfile" ] || continue
             foldername="${zipfile%.*}"
             
             echo "Processing: $zipfile"
-
-            # 1. HAPUS DARI GIT INDEX (Penting agar Git menganggap folder ini baru)
-            git rm -rf "$foldername" --ignore-unmatch
             
-            # 2. HAPUS FISIK
-            rm -rf "$foldername"
+            # Hapus folder lama agar benar-benar fresh
+            git rm -rf "$foldername" --ignore-unmatch 2>/dev/null || rm -rf "$foldername"
             mkdir -p "$foldername"
             
-            # 3. EKSTRAK ULANG
             unzip -o "$zipfile" -d "$foldername"
             
-            # 4. FIX STRUKTUR (Pindah ke root folder jika zip membungkus folder)
+            # Cari letak package.json dan jalankan build
             INNER_DIR=$(find "$foldername" -name "package.json" -printf '%h' -quit)
-            if [ -n "$INNER_DIR" ] && [ "$INNER_DIR" != "$foldername" ]; then
-              mv "$INNER_DIR"/* "$foldername/" 2>/dev/null || true
+            if [ -n "$INNER_DIR" ]; then
+              if [ "$INNER_DIR" != "$foldername" ]; then
+                mv "$INNER_DIR"/* "$foldername/" 2>/dev/null || true
+              fi
+              
+              cd "$foldername"
+              rm -f .gitignore
+              npm install
+              npm run build:all || npm run build
+              cd "$GITHUB_WORKSPACE"
             fi
             
-            # 5. BUAT FILE PENANDA UNIK (Selalu berubah tiap run)
-            echo "Last Update: $(date +'%Y-%m-%d %H:%M:%S')" > "$foldername/last-build.log"
-            
-            cd "$foldername"
-            
-            # 6. HAPUS .GITIGNORE & BUILD
-            rm -f .gitignore
-            npm install
-            npm run build:all || npm run build
-            
-            cd "$GITHUB_WORKSPACE"
+            # Tambahkan tanda timestamp agar folder terdeteksi "Baru saja" di GitHub
+            echo "Last Build: $(date)" > "$foldername/build-info.txt"
           done
 
       - name: Commit and Force Push
@@ -65,17 +74,12 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Force Add semua file
           git add -A --force
           
-          # Gunakan timestamp di commit message agar unik
-          TS=$(date +'%Y%m%d-%H%M%S')
-          
+          TS=$(date +'%Y-%m-%d %H:%M:%S')
           if ! git diff --cached --quiet; then
-            git commit -m "Update Build $TS [skip ci]"
+            git commit -m "Auto Update & Cleanup: $TS [skip ci]"
             git push origin main --force
           else
-            # Jika tetap dianggap sama, paksa dengan commit kosong
-            git commit --allow-empty -m "Manual Refresh $TS [skip ci]"
-            git push origin main --force
+            echo "Tidak ada perubahan."
           fi
