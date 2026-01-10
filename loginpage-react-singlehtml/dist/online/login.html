@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="-1">
+    <title>Masuk Jaringan - $(identity)</title>
+    
+    <link rel="icon" href="img/title.png">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        /* --- PENGATURAN UKURAN JAM --- */
+        #analogClock {
+            /* Atur ukuran tampilan jam di sini */
+            width: 200px !important;
+            height: 200px !important;
+            max-width: 100%; 
+        }
+
+        /* Badge Status (Hijau untuk Online) */
+        .status-badge {
+            background: rgba(16, 185, 129, 0.2); /* Hijau Transparan */
+            color: #10b981; /* Hijau Terang */
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            margin-bottom: 20px;
+            display: inline-block;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Memastikan jam di tengah */
+        .clock-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        
+        .wifi-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+            margin-bottom: 10px;
+        }
+    </style>
+  <script type="module" crossorigin src="./js/login.js"></script>
+</head>
+      <body data-target="online">
+        <div id="root"></div>
+        <div style="display:none" aria-hidden="true">
+  <!-- Login vars -->
+  <input id="mt-identity" value="$(identity)" />
+  <input id="mt-error" value="$(error)" />
+  <input id="mt-chap-id" value="$(chap-id)" />
+  <input id="mt-chap-challenge" value="$(chap-challenge)" />
+  <input id="mt-link-login-only" value="$(link-login-only)" />
+  <input id="mt-link-orig" value="$(link-orig)" />
+  <input id="mt-link-orig-esc" value="$(link-orig-esc)" />
+  <input id="mt-mac-esc" value="$(mac-esc)" />
+  <input id="mt-trial" value="$(trial)" />
+
+  <!-- Status vars -->
+  <input id="mt-username" value="$(username)" />
+  <input id="mt-ip" value="$(ip)" />
+  <input id="mt-mac" value="$(mac)" />
+  <input id="mt-uptime" value="$(uptime)" />
+  <input id="mt-bytes-in-nice" value="$(bytes-in-nice)" />
+  <input id="mt-bytes-out-nice" value="$(bytes-out-nice)" />
+  <input id="mt-remain-bytes-total" value="$(remain-bytes-total)" />
+  <input id="mt-remain-bytes-total-nice" value="$(remain-bytes-total-nice)" />
+  <input id="mt-session-time-left" value="$(session-time-left)" />
+  <input id="mt-login-by" value="$(login-by)" />
+  <input id="mt-login-by-mac" value="$(login-by-mac)" />
+  <input id="mt-blocked" value="$(blocked)" />
+  <input id="mt-link-advert" value="$(link-advert)" />
+  <input id="mt-link-logout" value="$(link-logout)" />
+  <input id="mt-refresh-timeout-secs" value="$(refresh-timeout-secs)" />
+
+  <!-- Redirect vars -->
+  <input id="mt-link-redirect" value="$(link-redirect)" />
+  <input id="mt-link-redirect-esc" value="$(link-redirect-esc)" />
+</div>
+
+      </body>
+      </html>
