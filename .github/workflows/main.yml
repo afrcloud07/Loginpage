@@ -1,4 +1,4 @@
-name: Multi ZIP Build with Auto-Cleanup
+name: Total Reset and Multi Build
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-multi:
+  clean-and-build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -22,50 +22,47 @@ jobs:
         with:
           node-version: 20
 
-      - name: Process ZIPs and Cleanup
+      - name: Nuke and Process
         run: |
-          # 1. CLEANUP: Hapus folder yang ZIP-nya sudah tidak ada
-          # Kita cek semua direktori di root kecuali folder sistem .git dan .github
-          for dir in */; do
-            dir=${dir%/} # Hapus slash di akhir nama folder
-            if [[ "$dir" == ".github" || "$dir" == "node_modules" ]]; then continue; fi
-            
-            # Jika tidak ada file ZIP yang namanya sama dengan folder, hapus foldernya
-            if [ ! -f "$dir.zip" ] && [ ! -f "$dir.ZIP" ]; then
-              echo "Menghapus folder yatim (tanpa ZIP): $dir"
-              git rm -rf "$dir" || rm -rf "$dir"
-            fi
-          done
+          # 1. SIMPAN DAFTAR ZIP KE MEMORI
+          # Kita ambil daftar zip dulu sebelum folder dibersihkan
+          ZIP_FILES=$(ls *.zip 2>/dev/null || true)
 
-          # 2. PROCESS: Ekstrak dan Build ZIP yang ada
-          for zipfile in *.zip; do
-            [ -e "$zipfile" ] || continue
+          if [ -z "$ZIP_FILES" ]; then
+            echo "Tidak ada file ZIP ditemukan. Berhenti."
+            exit 0
+          fi
+
+          # 2. HAPUS SEMUA FOLDER & FILE DI ROOT (Kecuali .github dan file .zip itu sendiri)
+          echo "Membersihkan root repositori..."
+          # Mencari semua file/folder selain .github, .git, dan *.zip lalu menghapusnya
+          find . -maxdepth 1 ! -name '.github' ! -name '.git' ! -name '*.zip' ! -name '.' -exec rm -rf {} +
+
+          # 3. PROSES SETIAP ZIP
+          for zipfile in $ZIP_FILES; do
             foldername="${zipfile%.*}"
-            
-            echo "Processing: $zipfile"
-            
-            # Hapus folder lama agar benar-benar fresh
-            git rm -rf "$foldername" --ignore-unmatch 2>/dev/null || rm -rf "$foldername"
+            echo "Memproses: $zipfile"
+
+            # Ekstrak
             mkdir -p "$foldername"
-            
             unzip -o "$zipfile" -d "$foldername"
-            
-            # Cari letak package.json dan jalankan build
+
+            # Perbaiki struktur jika di dalam zip ada folder lagi
             INNER_DIR=$(find "$foldername" -name "package.json" -printf '%h' -quit)
-            if [ -n "$INNER_DIR" ]; then
-              if [ "$INNER_DIR" != "$foldername" ]; then
-                mv "$INNER_DIR"/* "$foldername/" 2>/dev/null || true
-              fi
-              
-              cd "$foldername"
-              rm -f .gitignore
-              npm install
-              npm run build:all || npm run build
-              cd "$GITHUB_WORKSPACE"
+            if [ -n "$INNER_DIR" ] && [ "$INNER_DIR" != "$foldername" ]; then
+              mv "$INNER_DIR"/* "$foldername/" 2>/dev/null || true
             fi
+
+            # Build
+            cd "$foldername"
+            rm -f .gitignore # Hapus agar folder dist bisa di-upload
+            npm install
+            npm run build:all || npm run build
             
-            # Tambahkan tanda timestamp agar folder terdeteksi "Baru saja" di GitHub
-            echo "Last Build: $(date)" > "$foldername/build-info.txt"
+            # Tambahkan info build agar folder terdeteksi 'baru'
+            echo "Build: $(date)" > build-info.txt
+            
+            cd "$GITHUB_WORKSPACE"
           done
 
       - name: Commit and Force Push
@@ -73,13 +70,16 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
+
+          # Tambahkan semua perubahan (termasuk penghapusan file lama)
           git add -A --force
           
-          TS=$(date +'%Y-%m-%d %H:%M:%S')
+          TIMESTAMP=$(date +'%Y-%m-%d %H:%M:%S')
           if ! git diff --cached --quiet; then
-            git commit -m "Auto Update & Cleanup: $TS [skip ci]"
+            git commit -m "Total Reset & Rebuild: $TIMESTAMP [skip ci]"
             git push origin main --force
           else
-            echo "Tidak ada perubahan."
+            # Tetap push commit kosong agar keterangan waktu di GitHub berubah ke "Just now"
+            git commit --allow-empty -m "Manual Sync: $TIMESTAMP [skip ci]"
+            git push origin main --force
           fi
