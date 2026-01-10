@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error</title>
+    <style>
+        body {
+            background: #000; color: #ef4444; height: 100vh; margin: 0;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            font-family: sans-serif; text-align: center; padding: 20px;
+        }
+        h1 { font-size: 4rem; margin: 0; line-height: 1; }
+        p { color: #fff; margin: 20px 0 40px; font-size: 1.2rem; }
+        button {
+            background: transparent; border: 1px solid #fff; color: #fff;
+            padding: 10px 30px; border-radius: 30px; cursor: pointer;
+        }
+    </style>
+  <script type="module" crossorigin src="./js/error.js"></script>
+  <link rel="modulepreload" crossorigin href="./js/chunks/useMT.js">
+</head>
+<body data-target="online" data-page="error">
+  <div id="root"></div>
+    <input type="hidden" id="mt-error" value="$(error)"/>
+  <script>
+    window.__TARGET__ = "online";
+    window.__PAGE__ = "error";
+    </script>
+</body>
+</html>

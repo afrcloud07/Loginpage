@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="expires" content="-1">
+    <title>Masuk Jaringan - $(identity)</title>
+    
+    <link rel="icon" href="img/title.png">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <style>
+        /* --- PENGATURAN UKURAN JAM --- */
+        #analogClock {
+            /* Atur ukuran tampilan jam di sini */
+            width: 200px !important;
+            height: 200px !important;
+            max-width: 100%; 
+        }
+
+        /* Badge Status (Hijau untuk Online) */
+        .status-badge {
+            background: rgba(16, 185, 129, 0.2); /* Hijau Transparan */
+            color: #10b981; /* Hijau Terang */
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            margin-bottom: 20px;
+            display: inline-block;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Memastikan jam di tengah */
+        .clock-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        
+        .wifi-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+            margin-bottom: 10px;
+        }
+    </style>
+  <script type="module" crossorigin src="./js/login.js"></script>
+  <link rel="modulepreload" crossorigin href="./js/chunks/useMT.js">
+  <link rel="modulepreload" crossorigin href="./js/chunks/OfflineMaintenance.js">
+</head>
+      <body data-target="online" data-page="login">
+        <div id="root"></div>
+    <input type="hidden" id="mt-identity" value="$(identity)"/>
+    <input type="hidden" id="mt-error" value="$(error)"/>
+    <input type="hidden" id="mt-chap-id" value="$(chap-id)"/>
+    <input type="hidden" id="mt-chap-challenge" value="$(chap-challenge)"/>
+    <input type="hidden" id="mt-link-login-only" value="$(link-login-only)"/>
+    <input type="hidden" id="mt-link-orig" value="$(link-orig)"/>
+    <input type="hidden" id="mt-link-orig-esc" value="$(link-orig-esc)"/>
+    <input type="hidden" id="mt-mac-esc" value="$(mac-esc)"/>
+    <input type="hidden" id="mt-trial" value="$(trial)"/>
+        <script>
+          window.__TARGET__ = "online";
+          window.__PAGE__ = "login";
+          </script>
+      </body>
+      </html>

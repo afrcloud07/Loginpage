@@ -1,0 +1,23 @@
+{
+  "name": "loginpage-react",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev:online": "vite --mode online",
+    "dev:offline": "vite --mode offline",
+    "build:online": "vite build --mode online",
+    "build:offline": "vite build --mode offline",
+    "build:all": "npm run build:online && npm run build:offline",
+    "preview:online": "vite preview --mode online --port 4173",
+    "preview:offline": "vite preview --mode offline --port 4174"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.2.1",
+    "vite": "^5.4.0"
+  }
+}

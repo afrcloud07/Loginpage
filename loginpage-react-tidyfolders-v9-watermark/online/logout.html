@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout</title>
+    <style>
+        body {
+            background: #000; color: #fff; font-family: sans-serif;
+            height: 100vh; margin: 0; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+        }
+        h2 { font-weight: 300; font-size: 2rem; margin-bottom: 10px; }
+        p { color: #666; margin-bottom: 40px; }
+        
+        .actions { display: flex; gap: 20px; }
+        button {
+            padding: 15px 40px; border-radius: 50px; font-weight: bold;
+            cursor: pointer; border: none; transition: 0.3s;
+        }
+        .yes { background: #fff; color: #000; }
+        .yes:hover { background: #ddd; }
+        .no { background: transparent; color: #666; border: 1px solid #333; }
+        .no:hover { border-color: #fff; color: #fff; }
+    </style>
+</head>
+<body data-target="online" data-page="logout">
+  <div id="root"></div>
+    <input type="hidden" id="mt-link-logout" value="$(link-logout)"/>
+  <script>
+    window.__TARGET__ = "online";
+    window.__PAGE__ = "logout";
+    </script>
+  <script type="module" src="../src/entries/logout.jsx"></script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>System Maintenance - $(identity)</title>
+    
+    <link rel="icon" href="img/title.png">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- FontAwesome -->
+    
+    <style>
+        /* --- PENGATURAN UKURAN JAM --- */
+        #analogClock {
+            width: 200px !important;
+            height: 200px !important;
+            max-width: 100%; 
+        }
+
+        /* Badge Status (MERAH untuk Maintenance) */
+        .status-badge {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            margin-bottom: 15px;
+            display: inline-block;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .clock-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        
+        .wifi-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            text-shadow: 0 0 20px rgba(79, 70, 229, 0.3);
+            margin-bottom: 10px;
+        }
+
+        /* Teks Pesan Maintenance */
+        .maintenance-desc {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            background: rgba(239, 68, 68, 0.1);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px dashed rgba(239, 68, 68, 0.3);
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .input-hero {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .footer-nav {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: var(--text-dim);
+        }
+    </style>
+  <script type="module" crossorigin src="./js/login.js"></script>
+  <link rel="modulepreload" crossorigin href="./js/chunks/OfflineMaintenance.js">
+</head>
+      <body data-target="offline" data-page="login">
+        <div id="root"></div>
+    <input type="hidden" id="mt-identity" value="$(identity)"/>
+    <input type="hidden" id="mt-ip" value="$(ip)"/>
+    <input type="hidden" id="mt-mac" value="$(mac)"/>
+        <script>
+          window.__TARGET__ = "offline";
+          window.__PAGE__ = "login";
+          </script>
+      </body>
+      </html>

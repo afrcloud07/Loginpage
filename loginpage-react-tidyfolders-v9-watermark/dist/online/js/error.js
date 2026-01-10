@@ -1,0 +1,1 @@
+import{u as s,j as r,s as n,c as t,W as o}from"./chunks/useMT.js";function c(){const e=s();return r.jsxs("div",{children:[r.jsx("h1",{children:"!"}),r.jsxs("p",{children:['"',n(e.error),'"']}),r.jsx("button",{onClick:()=>history.back(),children:"KEMBALI"})]})}t.createRoot(document.getElementById("root")).render(r.jsxs(r.Fragment,{children:[r.jsx(c,{}),r.jsx(o,{})]}));
