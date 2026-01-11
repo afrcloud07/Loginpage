@@ -1,0 +1,210 @@
+/* ==========================================
+   ERROR & REDIRECT PAGE STYLES
+   ========================================== */
+
+body {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(220, 38, 38, 0.05) 0,
+    rgba(220, 38, 38, 0.05) 10px,
+    transparent 10px,
+    transparent 20px
+  );
+  font-family: var(--font-tech);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.error-card,
+.confirm-card,
+.redirect-card {
+  width: 100%;
+  max-width: 320px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  padding: 30px 20px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Error Card */
+.error-card {
+  border-left: 4px solid var(--danger);
+  box-shadow: 0 0 60px rgba(220, 38, 38, 0.1);
+  max-width: 450px;
+  padding: 40px 30px;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%);
+}
+
+.icon-wrapper {
+  width: 70px;
+  height: 70px;
+  border: 2px solid var(--danger);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--danger);
+  font-size: 32px;
+  box-shadow: 0 0 20px var(--danger-glow);
+  animation: shake 3s infinite;
+}
+
+.error-msg-box {
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px dashed var(--danger);
+  padding: 15px;
+  margin: 20px 0 30px;
+  color: #fca5a5;
+  font-size: 0.95rem;
+  font-family: var(--font-main);
+  line-height: 1.5;
+}
+
+/* Confirm Card (Logout) */
+.confirm-card {
+  border-top: 3px solid var(--danger);
+  box-shadow: 0 0 40px rgba(220, 38, 38, 0.15);
+}
+
+.warning-icon {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: var(--danger);
+  animation: pulse 1.5s infinite;
+}
+
+.user-tag {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  border: 1px dashed var(--border);
+  margin-bottom: 25px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: var(--accent);
+}
+
+.action-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Redirect Card */
+.redirect-card {
+  border-top: 2px solid var(--accent);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+}
+
+.redirect-card::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 15px;
+  height: 15px;
+  background: linear-gradient(135deg, transparent 50%, var(--accent) 50%);
+  opacity: 0.5;
+}
+
+.icon-box {
+  margin-bottom: 15px;
+  position: relative;
+  display: inline-block;
+}
+
+.success-icon {
+  width: 50px;
+  height: 50px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  font-size: 24px;
+  box-shadow: 0 0 15px var(--accent-glow);
+  animation: pulse 2s infinite;
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+.title span {
+  color: var(--danger);
+}
+
+.subtitle {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.loader-track {
+  width: 100%;
+  height: 3px;
+  background: var(--border);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.loader-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  transform: translateX(-100%);
+  animation: load 1.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.manual-link {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--border);
+  padding-bottom: 2px;
+  transition: 0.3s;
+}
+
+.manual-link:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+@media (max-width: 480px) {
+  .error-card,
+  .confirm-card,
+  .redirect-card {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+
+  .redirect-card {
+    padding: 25px 20px;
+    border: none;
+    border-top: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    background: rgba(15, 23, 42, 0.95);
+    clip-path: none;
+  }
+
+  body {
+    padding: 0;
+  }
+}
