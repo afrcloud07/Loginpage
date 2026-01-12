@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="-1" />
+    <link rel="icon" type="image/png" href="./assets/img/favicon.png" />
+    <title>AFR-Cloud.NET &gt; Login</title>
+
+    <!-- MikroTik placeholder values (replaced on RouterOS). Safe for local dev too. -->
+    <script>
+      window.__PAGE__ = 'login';
+
+      // Note: placeholders in external JS/CSS will NOT be replaced by RouterOS.
+      // That's why we keep hotspot variables in inline HTML scripts.
+      window.MT = {
+        
+        identity: "$(identity)",
+        linkLoginOnly: "$(link-login-only)",
+        linkLogin: "$(link-login)",
+        linkLogout: "$(link-logout)",
+        linkStatus: "$(link-status)",
+        linkRedirect: "$(link-redirect)",
+
+        linkOrig: "$(link-orig)",
+        linkOrigEsc: "$(link-orig-esc)",
+
+        chapId: "$(chap-id)",
+        chapChallenge: "$(chap-challenge)",
+
+        error: "$(error)",
+        errorOrig: "$(error-orig)",
+
+        trial: "$(trial)",
+        mac: "$(mac)",
+        macEsc: "$(mac-esc)",
+        username: "$(username)",
+        ip: "$(ip)",
+
+        bytesIn: "$(bytes-in)",
+        bytesOut: "$(bytes-out)",
+        remainBytesIn: "$(remain-bytes-in)",
+        remainBytesOut: "$(remain-bytes-out)",
+        uptime: "$(uptime)",
+        sessionTimeLeft: "$(session-time-left)",
+        refreshTimeout: "$(refresh-timeout)"
+      };
+    </script>
+
+    <!-- Keep MD5 helper compatible with your original template (CHAP) -->
+    <script src="./assets/js/md5.min.js"></script>
+    <script type="module" crossorigin src="./assets/chunk-main.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/style.css">
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
