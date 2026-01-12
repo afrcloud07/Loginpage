@@ -1,0 +1,24 @@
+{
+  "name": "afrcloud-login",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "gen:ads": "node scripts/generate-ads-manifest.mjs",
+    "predev": "npm run gen:ads",
+    "dev": "vite",
+    "prebuild": "npm run gen:ads",
+    "build": "vite build",
+    "preview": "vite preview",
+    "build:online": "vite build --outDir dist/online",
+    "build:all": "npm run build:online && node scripts/split-offline.mjs dist/online"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite": "^5.4.10"
+  }
+}
